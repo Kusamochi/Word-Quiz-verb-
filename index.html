@@ -18,15 +18,34 @@
   <div id="result"></div>
 
   <script>
-    const questions = [('を強く叩く', 'thump'), ('を全滅させる', 'annihilate'), ('〈髪、服など〉を乱す', 'dishevel'), ('〈悪霊など〉を追い払う', 'exorcise'), ('〈人〉を動揺させる', 'agitate'), ('〈力、価値など〉を減ずる', 'attenuate'), ('〈廃品、ごみ〉をあさる', 'scavenge'), ('〜をさびさせる', 'rust'), ('〜をすくいとる', 'skim'), ('〈血〉を輸血する', 'transfuse'), ('〜を厳しき統制する', 'regiment'), ('〜を確認する、突き止める', 'ascertain'), ('〈証拠〉を偽る', 'falsify'), ('〜をフォークなどで刺す', 'prong'), ('〜に折り目をつける', 'crease')];
+    const questions = [
+      ["を強く叩く", "thump"],
+      ["を全滅させる", "annihilate"],
+      ["〈髪、服など〉を乱す", "dishevel"],
+      ["〈悪霊など〉を追い払う", "exorcise"],
+      ["〈人〉を動揺させる", "agitate"],
+      ["〈力、価値など〉を減ずる", "attenuate"],
+      ["〈廃品、ごみ〉をあさる", "scavenge"],
+      ["〜をさびさせる", "rust"],
+      ["〜をすくいとる", "skim"],
+      ["〈血〉を輸血する", "transfuse"],
+      ["〜を厳しき統制する", "regiment"],
+      ["〜を確認する、突き止める", "ascertain"],
+      ["〈証拠〉を偽る", "falsify"],
+      ["〜をフォークなどで刺す", "prong"],
+      ["〜に折り目をつける", "crease"]
+    ];
 
+    let shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 10);
     let current = 0;
+    let correctCount = 0;
+
     const questionDiv = document.getElementById("question");
     const answerInput = document.getElementById("answerInput");
     const resultDiv = document.getElementById("result");
 
     function loadQuestion() {
-      const q = questions[current];
+      const q = shuffled[current];
       questionDiv.textContent = `問題：${q[0]}`;
       answerInput.value = "";
       answerInput.focus();
@@ -35,21 +54,25 @@
     answerInput.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const userAnswer = answerInput.value.trim().toLowerCase();
-        const correctAnswer = questions[current][1];
+        const correctAnswer = shuffled[current][1];
         if (userAnswer === correctAnswer) {
           resultDiv.textContent = "✅ 正解！";
+          correctCount++;
         } else {
           resultDiv.textContent = `❌ 不正解（正解：${correctAnswer}）`;
         }
         current++;
-        if (current < questions.length) {
+        if (current < 10) {
           setTimeout(() => {
             resultDiv.textContent = "";
             loadQuestion();
           }, 1500);
         } else {
-          questionDiv.textContent = "🎉 全問終了！お疲れさまでした！";
-          answerInput.disabled = true;
+          setTimeout(() => {
+            questionDiv.textContent = `終了！10問中 ${correctCount} 問正解でした！`;
+            answerInput.style.display = "none";
+            resultDiv.textContent = "";
+          }, 1500);
         }
       }
     });
