@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>英単語タイピングクイズ</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+    #question { font-size: 24px; margin-bottom: 20px; }
+    input[type="text"] { font-size: 18px; padding: 5px; }
+    #result { font-size: 20px; margin-top: 20px; color: green; }
+  </style>
+</head>
+<body>
+  <h1>英単語タイピングゲーム</h1>
+  <div id="question">Loading...</div>
+  <input type="text" id="answerInput" placeholder="英単語を入力">
+  <div id="result"></div>
+
+  <script>
+    const questions = [('を強く叩く', 'thump'), ('を全滅させる', 'annihilate'), ('〈髪、服など〉を乱す', 'dishevel'), ('〈悪霊など〉を追い払う', 'exorcise'), ('〈人〉を動揺させる', 'agitate'), ('〈力、価値など〉を減ずる', 'attenuate'), ('〈廃品、ごみ〉をあさる', 'scavenge'), ('〜をさびさせる', 'rust'), ('〜をすくいとる', 'skim'), ('〈血〉を輸血する', 'transfuse'), ('〜を厳しき統制する', 'regiment'), ('〜を確認する、突き止める', 'ascertain'), ('〈証拠〉を偽る', 'falsify'), ('〜をフォークなどで刺す', 'prong'), ('〜に折り目をつける', 'crease')];
+
+    let current = 0;
+    const questionDiv = document.getElementById("question");
+    const answerInput = document.getElementById("answerInput");
+    const resultDiv = document.getElementById("result");
+
+    function loadQuestion() {
+      const q = questions[current];
+      questionDiv.textContent = `問題：${q[0]}`;
+      answerInput.value = "";
+      answerInput.focus();
+    }
+
+    answerInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        const userAnswer = answerInput.value.trim().toLowerCase();
+        const correctAnswer = questions[current][1];
+        if (userAnswer === correctAnswer) {
+          resultDiv.textContent = "✅ 正解！";
+        } else {
+          resultDiv.textContent = `❌ 不正解（正解：${correctAnswer}）`;
+        }
+        current++;
+        if (current < questions.length) {
+          setTimeout(() => {
+            resultDiv.textContent = "";
+            loadQuestion();
+          }, 1500);
+        } else {
+          questionDiv.textContent = "🎉 全問終了！お疲れさまでした！";
+          answerInput.disabled = true;
+        }
+      }
+    });
+
+    loadQuestion();
+  </script>
+</body>
+</html>
